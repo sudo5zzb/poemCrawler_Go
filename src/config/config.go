@@ -1,8 +1,9 @@
 package config
 
 import (
-	"github.com/go-ini/ini"
-)
+	"gopkg.in/ini.v1"
+	"log"
+  )
 
 type Config struct {
 	Es_url                 string `ini:"es_url"`
@@ -13,13 +14,16 @@ type Config struct {
 	Request_parallel_size  int16  `ini:"request_parallel_size"`
 }
 
-var config Config
+ var config *Config
 
-func GetConfig() Config {
+func GetConfig() *Config {
 	if config != nil {
 		return config
 	}
-	var config Config
-	conf, err := ini.Load("../../app.cfg")
+	config:=new(Config)
+	err:=ini.MapTo(config,"../../app.cfg")
+	if err!=nil{
+		log.Fatalln(err)
+	}
 	return config
 }
